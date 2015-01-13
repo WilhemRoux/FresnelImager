@@ -5,14 +5,23 @@
 from sys import argv, exit
 from src import ConfigurationParameters
 from os.path import exists, isfile
+import numpy
 
 
 def run(conf_file):
+
     # Gets the parameters for the simulation
     params = ConfigurationParameters.ConfigurationParameters()
     params.read_configuration(conf_file)
-    print ("This is the END !")
 
+    # Create a wavefront
+    wavefront = numpy.zeros((params.wavefront_sampling,
+                             params.wavefront_sampling), complex)
+
+    # Wavefront through the Fresnel Array
+    params.fresnel_array.transmission(wavefront)
+
+    print(wavefront)
 
 if __name__ == '__main__':
     if len(argv) == 2:

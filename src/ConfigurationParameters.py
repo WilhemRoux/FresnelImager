@@ -18,7 +18,7 @@ class ConfigurationParameters:
         self.source_optical_axis_angle = 0.
         self.source_direction_angle = 0.
         self.wavelength = 260.e-9
-        self.fresnel_array = FresnelArray.FresnelArray()
+        self.fresnel_array = FresnelArray
         self.distance01 = 10.
 
     def read_configuration(self, configuration_file_path):
