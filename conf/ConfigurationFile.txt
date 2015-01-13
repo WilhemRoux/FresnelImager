@@ -1,0 +1,120 @@
+##
+##  Configuration file for PropagSimpleGrid.
+##  Created by Wilhem ROUX on 19/11/2014.
+##
+
+[conf]
+
+##
+##  Program parameters
+##
+
+# Directory where output files will be written.
+# Default value : Local directory
+output_directory_path = /Users/wilhemroux/Desktop/results/
+
+# Number of threads to run the program in multithread.
+# Default value : 0
+n_threads = 0
+
+# Sampling of the wavefront (Advise : 10000 with 4 Go of RAM, 16384 with 8 Go of
+# RAM, 24000 with 12 Go of RAM).
+# Default value : 10000
+wavefront_sampling = 1000
+
+
+##
+##  Source parameters
+##
+
+# Angle between the source and the optical axis, in degrees (between 0 and 90°).
+# Default value : 0.
+source_optical_axis_angle = 0.
+
+# Angle between the horizontal half axis and the source on the final image
+# plane, counterclockwise, in degrees (between 0° and 360°).
+# Default value : 0.
+source_direction_angle = 0.
+
+# Wavelength of light emitted by the source, in meters.
+# Default value : 260.e-9
+wavelength = 260.e-9
+
+
+##
+##  Primary grid
+##
+
+# Width of the grid, in meters.
+# Default value : 0.065
+width = 0.065
+
+# Number of Fresnel areas (from the center to a half-side).
+# Default value : 160
+n_zones = 160
+
+# Central obstruction, in meters.
+# Default value : 0.
+obstruction = 0.
+
+# Initial offset at the center, in fraction of OPD.
+# Default value : 0.75
+central_offset = 0.5
+
+
+##
+##  Apodization parameters
+##
+
+# Maximum half width of blank ring, in fraction of OPD.
+# Default value : 0.25
+max.half.width = 0.25
+
+# Minimum half width of blank ring, in fraction of OPD.
+# Default value : 0.13
+min.half.width = 0.13
+
+# Apodization function used.
+# If 0 : cos^2()
+# If 1 : cos()
+# Default value : 0
+apod.function = 1
+
+
+##
+##  Retaining bars
+##
+
+# Bar center position compared to the Fresnel area, in fraction of OPD.
+# Default value : -1.
+bar.position = -0.375
+
+# Half width bar at the center, in fraction of OPD.
+# Default value : 0.10
+half.width.center = 0.07
+
+# Half width bar at the edge, in fraction of OPD.
+# Default value : 0.05
+half.width.edge = 0.24
+
+# Width or presence of central bar.
+# If > 0. : Width of central bar in meters.
+# Else if < -0.25 & > -1. : No central bar and the first bar is multiplied by
+# the absolute value.
+# Else : No central bar and the first bar is nominal.
+# Default value : -1.
+central.bar = -0.5
+
+# Numbers of bars to skip.
+# If 0 : All present bars.
+# If n : 1 present bar on n+1.
+# Default value : 1
+skipped.bars = 2
+
+##
+##  Characteristic distances
+##
+
+# Distance between the primary grid and the first field lens, in meters.
+# Default value : 10
+distance01 = 10
