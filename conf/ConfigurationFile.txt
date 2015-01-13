@@ -11,7 +11,7 @@
 
 # Directory where output files will be written.
 # Default value : Local directory
-output_directory_path = /Users/wilhemroux/Desktop/results/
+output_directory_path = /Users/wilhemroux/Desktop/NewResults/
 
 # Number of threads to run the program in multithread.
 # Default value : 0

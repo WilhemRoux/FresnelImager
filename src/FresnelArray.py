@@ -36,8 +36,6 @@ class FresnelArray:
         x_center = self.width / 2
         y_center = self.width / 2
 
-        print pixel_width
-
         for i in arange(size/2):
             for j in arange(size/2):
                 x = i * pixel_width - x_center
