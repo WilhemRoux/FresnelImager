@@ -4,6 +4,7 @@
 
 from sys import exit
 from numpy import arange
+from math import sqrt, pow
 
 
 class FresnelArray:
@@ -14,7 +15,7 @@ class FresnelArray:
         self.obstruction = 0.
         self.central_offset = 0.75
 
-    def transmission(self, wavefront):
+    def apply_transmission(self, wavefront):
 
         size = len(wavefront)
         if size % 2:
@@ -40,12 +41,13 @@ class FresnelArray:
             for j in arange(size/2):
                 x = i * pixel_width - x_center
                 y = j * pixel_width - y_center
-                if self.is_perforated(x, y):
+                if self.__is_perforated(x, y):
                     wavefront[i][j] = 1
                     # Due to the double symmetry
                     wavefront[i][size-1-j] = 1
                     wavefront[size-1-i][j] = 1
                     wavefront[size-1-i][size-1-j] = 1
 
-    def is_perforated(self, x, y):
-        return True
+    def __is_perforated(self, x, y):
+        is_perforated = False
+        return is_perforated

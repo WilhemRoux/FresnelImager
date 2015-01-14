@@ -4,19 +4,23 @@
 
 import numpy
 import pyfits
-from math import sqrt
+from math import sqrt, pow
 
 
 def save_complex_wavefront(fits_file_path, wavefront):
 
     height = len(wavefront)
     width = len(wavefront[0])
-    image = numpy.zeros((2, height, width))
+    image = numpy.empty((2, height, width))
 
-    for i in numpy.arange(height):
-        for j in numpy.arange(width):
+    i = 0
+    while i < height:
+        j = 0
+        while j < width:
             image[0][i][j] = wavefront[i][j].real
             image[1][i][j] = wavefront[i][j].imag
+            j += 1
+        i += 1
 
     pyfits.writeto(fits_file_path, image, clobber=True)
 
@@ -25,11 +29,15 @@ def save_module_wavefront(fits_file_path, wavefront):
 
     height = len(wavefront)
     width = len(wavefront[0])
-    image = numpy.zeros((height, width))
+    image = numpy.empty_like((height, width))
 
-    for i in numpy.arange(height):
-        for j in numpy.arange(width):
-            image[i][j] = sqrt(wavefront[i][j].real ^ 2 + wavefront[i][
-                j].imag ^ 2)
+    i = 0
+    while i < height:
+        j = 0
+        while j < width:
+            c = wavefront[i][j]
+            image[i][j] = sqrt(pow(c.real, 2) + pow(c.imag, 2))
+            j += 1
+        i += 1
 
     pyfits.writeto(fits_file_path, image, clobber=True)
