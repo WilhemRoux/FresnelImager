@@ -41,51 +41,33 @@ class FresnelArray:
         x_center = self.width / 2
         y_center = self.width / 2
 
-        # Search pixel after pixel on only one quadrant if the zone is
-        # perforated or not
-        # To improve performances, for each line, when a ring is detected,
-        # the program search the next
-
-        self.current_ring_index = len(self.rings) - 1
-        self.edge_ring_index = len(self.rings) - 1
+        # Search, line after line, each transparent ring crossed
+        precedent_first_ring = len(self.rings) - 1
         for i in arange(0, size / 2 + 1):
-            new_line_flag = True
+
+            # Pixel after pixel
+            current_ring = precedent_first_ring
             for j in arange(0, size / 2 + 1):
+
+                # Compute the distance to the center
                 x = i * pixel_width - x_center
                 y = j * pixel_width - y_center
-                if self.__is_on_blank_ring(x, y, new_line_flag):
-                    # Full the four quadrant
-                    wavefront[i][j] = 1
-                    wavefront[i][size - 1 - j] = 1
-                    wavefront[size - 1 - i][j] = 1
-                    wavefront[size - 1 - i][size - 1 - j] = 1
-                new_line_flag = False
+                r = sqrt(pow(x, 2) + pow(y, 2))
 
-    def __is_on_blank_ring(self, x, y, new_line_flag):
-
-        r = sqrt(pow(x, 2) + pow(y, 2))
-
-        if new_line_flag:
-            first_ring_found = False
-            i = self.edge_ring_index
-            while not first_ring_found:
-                if r >= self.rings[i][0]:
-                    first_ring_found = True
-                    self.current_ring_index = i
-                    self.edge_ring_index = i
+                # Detect the first ring
+                if j == 0:
+                    if r <= self.rings[current_ring][1]:
+                        if r >= self.rings[current_ring][0]:
+                            full_four_quadrant(wavefront, i, j, 1)
+                        else:
+                            current_ring -= 1
+                            precedent_first_ring = current_ring
                 else:
-                    i -= 1
-
-        i = self.current_ring_index
-        if r >= self.rings[i][1]:
-            return False
-        elif r >= self.rings[i][0]:
-            return True
-        elif i > 0:
-            self.current_ring_index -= 1
-            return False
-        else:
-            return False
+                    if r <= self.rings[current_ring][1]:
+                        if r >= self.rings[current_ring][0]:
+                            full_four_quadrant(wavefront, i, j, 1)
+                        else:
+                            current_ring -= 1
 
     def __construction(self):
 
@@ -115,3 +97,11 @@ class FresnelArray:
                 is_obstructed = True
             else:
                 del self.rings[0]
+
+
+def full_four_quadrant(wavefront, i, j, value):
+    size = len(wavefront)
+    wavefront[i][j] = value
+    wavefront[i][size - 1 - j] = value
+    wavefront[size - 1 - i][j] = value
+    wavefront[size - 1 - i][size - 1 - j] = value
