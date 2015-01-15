@@ -15,12 +15,11 @@ def run(conf_file):
     params = ConfigurationParameters.ConfigurationParameters()
     params.read_configuration(conf_file)
 
-    # Create a wavefront
-    wavefront = numpy.zeros((params.wavefront_sampling,
-                             params.wavefront_sampling), complex)
+    # Create the binary array of transmission
+    binary_transmission = create_binary_transmission()
 
-    # Wavefront through the Fresnel Array
-    params.fresnel_array.apply_transmission(wavefront)
+    # Create a wavefront
+    wavefront = binary_transmission.astype(complex)
 
     # Save the wavefront
     fits_file_path = params.output_directory_path + "/wavefront.fits"

@@ -8,6 +8,7 @@ from math import sqrt, pow
 
 
 class FresnelArray:
+
     def __init__(self):
         self.width = 0.065
         self.n_zones = 160
@@ -15,8 +16,6 @@ class FresnelArray:
         self.offset = 0.75
         self.rings = []
         self.wavelength = 260.e-9
-        self.current_ring_index = 0
-        self.edge_ring_index = 0
 
     def apply_transmission(self, wavefront):
 
