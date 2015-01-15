@@ -24,7 +24,7 @@ def run(conf_file):
 
     # Save the wavefront
     fits_file_path = params.output_directory_path + "/wavefront.fits"
-    Fits.save_module_wavefront(fits_file_path, wavefront, dtype='uint8')
+    Fits.save_complex_wavefront(fits_file_path, wavefront, dtype='uint8')
 
 if __name__ == '__main__':
     if len(argv) == 2:

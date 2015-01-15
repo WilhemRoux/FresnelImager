@@ -16,6 +16,7 @@ class FresnelArray:
         self.rings = []
         self.wavelength = 260.e-9
         self.current_ring_index = 0
+        self.edge_ring_index = 0
 
     def apply_transmission(self, wavefront):
 
@@ -45,8 +46,9 @@ class FresnelArray:
         # To improve performances, for each line, when a ring is detected,
         # the program search the next
 
+        self.current_ring_index = len(self.rings) - 1
+        self.edge_ring_index = len(self.rings) - 1
         for i in arange(0, size / 2 + 1):
-            print ("Construction %int / 500", i)
             new_line_flag = True
             for j in arange(0, size / 2 + 1):
                 x = i * pixel_width - x_center
@@ -65,11 +67,12 @@ class FresnelArray:
 
         if new_line_flag:
             first_ring_found = False
-            i = len(self.rings) - 1
+            i = self.edge_ring_index
             while not first_ring_found:
                 if r >= self.rings[i][0]:
                     first_ring_found = True
                     self.current_ring_index = i
+                    self.edge_ring_index = i
                 else:
                     i -= 1
 

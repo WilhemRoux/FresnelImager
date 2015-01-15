@@ -2,7 +2,7 @@
 # -*-coding:Utf-8 -*
 # Copyright 2014 Wilhem Roux
 
-from numpy import sqrt, power, array
+import numpy as np
 import pyfits
 
 # BITPIX    Numpy Data Type
@@ -15,13 +15,13 @@ import pyfits
 
 def save_complex_wavefront(fits_file_path, wavefront, dtype='float64'):
 
-    image = array([wavefront.real, wavefront.imag])
+    image = np.array([wavefront.real, wavefront.imag])
 
-    pyfits.writeto(fits_file_path, image, clobber=True)
+    pyfits.writeto(fits_file_path, image.astype(dtype), clobber=True)
 
 
 def save_module_wavefront(fits_file_path, wavefront, dtype = 'float64'):
 
-    image = sqrt(power(wavefront.real, 2) + power(wavefront.imag, 2))
+    image = np.sqrt(np.power(wavefront.real, 2) + np.power(wavefront.imag, 2))
 
-    pyfits.writeto(fits_file_path, image, clobber=True)
+    pyfits.writeto(fits_file_path, image.astype(dtype), clobber=True)
