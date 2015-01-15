@@ -45,12 +45,12 @@ class FresnelArray:
         precedent_first_ring = len(self.rings) - 1
         for i in arange(0, size / 2 + 1):
 
+            x = i * pixel_width - x_center
             # Pixel after pixel
             current_ring = precedent_first_ring
             for j in arange(0, size / 2 + 1):
 
                 # Compute the distance to the center
-                x = i * pixel_width - x_center
                 y = j * pixel_width - y_center
                 r = sqrt(pow(x, 2) + pow(y, 2))
 

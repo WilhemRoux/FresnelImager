@@ -20,7 +20,7 @@ n_threads = 0
 # Sampling of the wavefront (Advise : 10000 with 4 Go of RAM, 16384 with 8 Go of
 # RAM, 24000 with 12 Go of RAM).
 # Default value : 10000
-wavefront_sampling = 10000
+wavefront_sampling = 1000
 
 
 ##
