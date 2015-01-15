@@ -11,7 +11,7 @@ def save_complex_wavefront(fits_file_path, wavefront):
 
     height = len(wavefront)
     width = len(wavefront[0])
-    image = numpy.empty((2, height, width))
+    image = numpy.empty([2, height, width])
 
     i = 0
     while i < height:
@@ -29,7 +29,7 @@ def save_module_wavefront(fits_file_path, wavefront):
 
     height = len(wavefront)
     width = len(wavefront[0])
-    image = numpy.empty_like((height, width))
+    image = numpy.empty([height, width])
 
     i = 0
     while i < height:

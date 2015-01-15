@@ -51,7 +51,7 @@ width = 0.065
 
 # Number of Fresnel areas (from the center to a half-side).
 # Default value : 160
-n_zones = 160
+n_zones = 10
 
 # Central obstruction, in meters.
 # Default value : 0.

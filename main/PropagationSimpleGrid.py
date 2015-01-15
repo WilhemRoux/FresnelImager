@@ -6,7 +6,7 @@ from sys import argv, exit
 from src import ConfigurationParameters
 from os.path import exists, isfile
 import numpy
-from src.FitsTools import save_complex_wavefront, save_module_wavefront
+from src.FitsTools import save_complex_wavefront
 
 
 def run(conf_file):
@@ -24,7 +24,7 @@ def run(conf_file):
 
     # Save the wavefront
     fits_file_path = params.output_directory_path + "/wavefront.fits"
-    save_module_wavefront(fits_file_path, wavefront)
+    save_complex_wavefront(fits_file_path, wavefront)
 
 if __name__ == '__main__':
     if len(argv) == 2:

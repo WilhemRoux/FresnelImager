@@ -80,6 +80,7 @@ class ConfigurationParameters:
         if parser.has_option('conf', 'wavelength'):
             if parser.getfloat('conf', 'wavelength') >= 0:
                 self.wavelength = parser.getfloat('conf', 'wavelength')
+                self.fresnel_array.wavelength = self.wavelength
             else:
                 print("Error : wavelength is negative.")
                 exit(1)
@@ -122,7 +123,7 @@ class ConfigurationParameters:
 
         if parser.has_option('conf', 'central_offset'):
             if parser.getfloat('conf', 'central_offset') >= 0:
-                self.fresnel_array.central_offset =\
+                self.fresnel_array.offset =\
                     parser.getfloat('conf', 'central_offset')
             else:
                 print("Error : central_offset is negative.")
@@ -131,7 +132,7 @@ class ConfigurationParameters:
             print ("Warning : No central_offset in %s ." %
                    configuration_file_path)
             print ("Default value : central_offset = %s" %
-                   self.fresnel_array.central_offset)
+                   self.fresnel_array.offset)
 
         if parser.has_option('conf', 'distance01'):
             if parser.getfloat('conf', 'distance01') >= 0:
