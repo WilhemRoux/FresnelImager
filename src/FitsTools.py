@@ -2,42 +2,26 @@
 # -*-coding:Utf-8 -*
 # Copyright 2014 Wilhem Roux
 
-import numpy
+from numpy import sqrt, power, array
 import pyfits
-from math import sqrt, pow
+
+# BITPIX    Numpy Data Type
+# 8         numpy.uint8 (note it is UNsigned integer)
+# 16        numpy.int16
+# 32        numpy.int32
+# -32       numpy.float32
+# -64       numpy.float64
 
 
-def save_complex_wavefront(fits_file_path, wavefront):
+def save_complex_wavefront(fits_file_path, wavefront, dtype='float64'):
 
-    height = len(wavefront)
-    width = len(wavefront[0])
-    image = numpy.empty([2, height, width])
-
-    i = 0
-    while i < height:
-        j = 0
-        while j < width:
-            image[0][i][j] = wavefront[i][j].real
-            image[1][i][j] = wavefront[i][j].imag
-            j += 1
-        i += 1
+    image = array([wavefront.real, wavefront.imag])
 
     pyfits.writeto(fits_file_path, image, clobber=True)
 
 
-def save_module_wavefront(fits_file_path, wavefront):
+def save_module_wavefront(fits_file_path, wavefront, dtype = 'float64'):
 
-    height = len(wavefront)
-    width = len(wavefront[0])
-    image = numpy.empty([height, width])
-
-    i = 0
-    while i < height:
-        j = 0
-        while j < width:
-            c = wavefront[i][j]
-            image[i][j] = sqrt(pow(c.real, 2) + pow(c.imag, 2))
-            j += 1
-        i += 1
+    image = sqrt(power(wavefront.real, 2) + power(wavefront.imag, 2))
 
     pyfits.writeto(fits_file_path, image, clobber=True)

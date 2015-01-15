@@ -15,13 +15,14 @@ class FresnelArray:
         self.offset = 0.75
         self.rings = []
         self.wavelength = 260.e-9
+        self.current_ring_index = 0
 
     def apply_transmission(self, wavefront):
 
         self.__construction()
         size = len(wavefront)
         if size % 2:
-            print("Error : Wavefront sampling (%i) has to give an even number !"
+            print("Error : Wavefront size (%i) must be an even number !"
                   % size)
             exit(1)
 
@@ -43,27 +44,45 @@ class FresnelArray:
         # perforated or not
         # To improve performances, for each line, when a ring is detected,
         # the program search the next
-        for i in arange(size / 2):
-            for j in arange(size / 2):
+
+        for i in arange(0, size / 2 + 1):
+            print ("Construction %int / 500", i)
+            new_line_flag = True
+            for j in arange(0, size / 2 + 1):
                 x = i * pixel_width - x_center
                 y = j * pixel_width - y_center
-                if self.__is_perforated(x, y):
+                if self.__is_on_blank_ring(x, y, new_line_flag):
+                    # Full the four quadrant
                     wavefront[i][j] = 1
-                    # Due to the double symmetry
                     wavefront[i][size - 1 - j] = 1
                     wavefront[size - 1 - i][j] = 1
                     wavefront[size - 1 - i][size - 1 - j] = 1
+                new_line_flag = False
 
-    def __is_perforated(self, x, y):
+    def __is_on_blank_ring(self, x, y, new_line_flag):
+
         r = sqrt(pow(x, 2) + pow(y, 2))
-        is_perforated = False
-        n_rings = len(self.rings)
-        i = 0
-        while i < n_rings and not is_perforated:
-            if self.rings[i][0] <= r <= self.rings[i][1]:
-                is_perforated = True
-            i += 1
-        return is_perforated
+
+        if new_line_flag:
+            first_ring_found = False
+            i = len(self.rings) - 1
+            while not first_ring_found:
+                if r >= self.rings[i][0]:
+                    first_ring_found = True
+                    self.current_ring_index = i
+                else:
+                    i -= 1
+
+        i = self.current_ring_index
+        if r >= self.rings[i][1]:
+            return False
+        elif r >= self.rings[i][0]:
+            return True
+        elif i > 0:
+            self.current_ring_index -= 1
+            return False
+        else:
+            return False
 
     def __construction(self):
 
