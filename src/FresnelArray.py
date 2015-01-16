@@ -17,7 +17,7 @@ class FresnelArray:
         self.rings = []
         self.wavelength = 260.e-9
 
-    def apply_transmission(self, wavefront):
+    def create_binary_transmission(self, wavefront):
 
         self.__construction()
         size = len(wavefront)
@@ -40,33 +40,93 @@ class FresnelArray:
         x_center = self.width / 2
         y_center = self.width / 2
 
-        # Search, line after line, each transparent ring crossed
-        precedent_first_ring = len(self.rings) - 1
-        for i in arange(0, size / 2 + 1):
+        # Corner pixel
+        r = sqrt(pow(x_center, 2) + pow(x_center, 2))
 
+        current_ring = len(self.rings) - 1
+        is_localized = False
+        on_blank = False
+        while not is_localized:
+            if r >= self.rings[current_ring][1]:
+                is_localized = True
+                on_blank = False
+            elif r >= self.rings[current_ring][1]:
+                is_localized = True
+                on_blank = True
+            else:
+                current_ring -= 1
+        del is_localized
+        precedent_on_blank = on_blank
+        precedent_current_ring = current_ring
+        full_four_quadrant(wavefront, 0, 0, on_blank)
+
+        print "Line 0"
+        print ("\tPixel 0 : On blank = %r" % on_blank)
+
+        # First line
+        for j in arange(1, size / 2 + 1):
+
+                y = j * pixel_width - y_center
+                r = sqrt(pow(x_center, 2) + pow(y, 2))
+
+                if on_blank:
+                    if r >= self.rings[current_ring][0]:
+                        full_four_quadrant(wavefront, 0, j, True)
+                    else:
+                        on_blank = False
+                        current_ring -= 1
+                        full_four_quadrant(wavefront, 0, j, False)
+                else:
+                    if r >= self.rings[current_ring][1]:
+                        full_four_quadrant(wavefront, 0, j, False)
+                    else:
+                        on_blank = True
+                        full_four_quadrant(wavefront, 0, j, True)
+
+                print ("\tPixel %d : On blank = %r" % (j, on_blank))
+
+        # Next lines
+        for i in arange(1, size / 2 + 1):
+
+            # First line pixel
             x = i * pixel_width - x_center
-            # Pixel after pixel
-            current_ring = precedent_first_ring
-            for j in arange(0, size / 2 + 1):
+            r = sqrt(pow(x, 2) + pow(y_center, 2))
+            if precedent_on_blank:
+                if r >= self.rings[precedent_current_ring][0]:
+                    full_four_quadrant(wavefront, i, 0, True)
+                else:
+                    precedent_on_blank = False
+                    precedent_current_ring -= 1
+                    full_four_quadrant(wavefront, i, 0, False)
+            else:
+                if r >= self.rings[precedent_current_ring][1]:
+                    full_four_quadrant(wavefront, i, 0, False)
+                else:
+                    precedent_on_blank = True
+                    full_four_quadrant(wavefront, i, 0, True)
+            on_blank = precedent_on_blank
+            current_ring = precedent_current_ring
 
-                # Compute the distance to the center
+            print ("Line %d : On blank = %r" % (i, on_blank))
+
+            for j in arange(1, size / 2 + 1):
+
                 y = j * pixel_width - y_center
                 r = sqrt(pow(x, 2) + pow(y, 2))
 
-                # Detect the first ring
-                if j == 0:
-                    if r <= self.rings[current_ring][1]:
-                        if r >= self.rings[current_ring][0]:
-                            full_four_quadrant(wavefront, i, j, 1)
-                        else:
-                            current_ring -= 1
-                            precedent_first_ring = current_ring
+                if on_blank:
+                    if r >= self.rings[current_ring][0]:
+                        full_four_quadrant(wavefront, i, j, True)
+                    else:
+                        on_blank = False
+                        current_ring -= 1
+                        full_four_quadrant(wavefront, i, j, False)
                 else:
-                    if r <= self.rings[current_ring][1]:
-                        if r >= self.rings[current_ring][0]:
-                            full_four_quadrant(wavefront, i, j, 1)
-                        else:
-                            current_ring -= 1
+                    if r >= self.rings[current_ring][1]:
+                        full_four_quadrant(wavefront, i, j, False)
+                    else:
+                        on_blank = True
+                        full_four_quadrant(wavefront, i, j, True)
 
     def __construction(self):
 
@@ -96,6 +156,15 @@ class FresnelArray:
                 is_obstructed = True
             else:
                 del self.rings[0]
+
+    def __found_ring(self, start, r):
+        is_found = False
+        while not is_found and start >= 0:
+            if r >= self.rings[start][0]:
+                is_found = True
+            else:
+                start -= 1
+        return start
 
 
 def full_four_quadrant(wavefront, i, j, value):
