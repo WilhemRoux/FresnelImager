@@ -22,7 +22,7 @@ class FresnelArray:
         self.__construction()
         size = len(wavefront)
         if size % 2:
-            print("Error : Wavefront size (%i) must be an even number !"
+            print("Error : Wavefront size (%d) must be an even number !"
                   % size)
             exit(1)
 
@@ -60,9 +60,6 @@ class FresnelArray:
         precedent_current_ring = current_ring
         full_four_quadrant(wavefront, 0, 0, on_blank)
 
-        print "Line 0"
-        print ("\tPixel 0 : On blank = %r" % on_blank)
-
         # First line
         for j in arange(1, size / 2 + 1):
 
@@ -82,8 +79,6 @@ class FresnelArray:
                     else:
                         on_blank = True
                         full_four_quadrant(wavefront, 0, j, True)
-
-                print ("\tPixel %d : On blank = %r" % (j, on_blank))
 
         # Next lines
         for i in arange(1, size / 2 + 1):
@@ -106,8 +101,6 @@ class FresnelArray:
                     full_four_quadrant(wavefront, i, 0, True)
             on_blank = precedent_on_blank
             current_ring = precedent_current_ring
-
-            print ("Line %d : On blank = %r" % (i, on_blank))
 
             for j in arange(1, size / 2 + 1):
 

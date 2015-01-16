@@ -16,7 +16,9 @@ def run(conf_file):
     params.read_configuration(conf_file)
 
     # Create the binary array of transmission
-    binary_transmission = create_binary_transmission()
+    binary_transmission = numpy.zeros((params.wavefront_sampling,
+                                       params.wavefront_sampling), dtype=bool)
+    params.fresnel_array.create_binary_transmission(binary_transmission)
 
     # Create a wavefront
     wavefront = binary_transmission.astype(complex)
