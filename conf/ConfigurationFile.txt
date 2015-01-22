@@ -3,7 +3,7 @@
 ##  Created by Wilhem ROUX on 19/11/2014.
 ##
 
-[conf]
+[configuration]
 
 ##
 ##  Program parameters
@@ -20,7 +20,7 @@ n_threads = 0
 # Sampling of the wavefront (Advise : 10000 with 4 Go of RAM, 16384 with 8 Go of
 # RAM, 24000 with 12 Go of RAM).
 # Default value : 10000
-wavefront_sampling = 2000
+wavefront_sampling = 5000
 
 
 ##
@@ -29,7 +29,7 @@ wavefront_sampling = 2000
 
 # Angle between the source and the optical axis, in degrees (between 0 and 90°).
 # Default value : 0.
-source_optical_axis_angle = 0.
+source_optical_axis_angle = 10.
 
 # Angle between the horizontal half axis and the source on the final image
 # plane, counterclockwise, in degrees (between 0° and 360°).

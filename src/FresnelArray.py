@@ -3,13 +3,13 @@
 # Copyright 2014 Wilhem Roux
 
 from sys import exit
-from numpy import arange
+from numpy import arange, zeros
 from math import sqrt, pow
 
 
 class FresnelArray:
-
     def __init__(self):
+
         self.width = 0.065
         self.n_zones = 160
         self.obstruction = 0.
@@ -17,13 +17,12 @@ class FresnelArray:
         self.rings = []
         self.wavelength = 260.e-9
 
-    def create_binary_transmission(self, wavefront):
+    def create_binary_transmission(self, size):
 
         self.__construction()
-        size = len(wavefront)
+        fresnel_array = zeros((size, size), dtype='bool')
         if size % 2:
-            print("Error : Wavefront size (%d) must be an even number !"
-                  % size)
+            print("Error : Wavefront size (%d) must be an even number !" % size)
             exit(1)
 
         # Width in meters of a pixel
@@ -40,86 +39,50 @@ class FresnelArray:
         x_center = self.width / 2
         y_center = self.width / 2
 
-        # Corner pixel
-        r = sqrt(pow(x_center, 2) + pow(x_center, 2))
-
+        precedent_current_ring = len(self.rings) - 1
+        precedent_on_blank = False
         current_ring = len(self.rings) - 1
-        is_localized = False
         on_blank = False
-        while not is_localized:
-            if r >= self.rings[current_ring][1]:
-                is_localized = True
-                on_blank = False
-            elif r >= self.rings[current_ring][1]:
-                is_localized = True
-                on_blank = True
-            else:
-                current_ring -= 1
-        del is_localized
-        precedent_on_blank = on_blank
-        precedent_current_ring = current_ring
-        full_four_quadrant(wavefront, 0, 0, on_blank)
 
-        # First line
-        for j in arange(1, size / 2 + 1):
+        for i in arange(0, size / 2 + 1):
 
-                y = j * pixel_width - y_center
-                r = sqrt(pow(x_center, 2) + pow(y, 2))
-
-                if on_blank:
-                    if r >= self.rings[current_ring][0]:
-                        full_four_quadrant(wavefront, 0, j, True)
-                    else:
-                        on_blank = False
-                        current_ring -= 1
-                        full_four_quadrant(wavefront, 0, j, False)
-                else:
-                    if r >= self.rings[current_ring][1]:
-                        full_four_quadrant(wavefront, 0, j, False)
-                    else:
-                        on_blank = True
-                        full_four_quadrant(wavefront, 0, j, True)
-
-        # Next lines
-        for i in arange(1, size / 2 + 1):
-
-            # First line pixel
             x = i * pixel_width - x_center
-            r = sqrt(pow(x, 2) + pow(y_center, 2))
-            if precedent_on_blank:
-                if r >= self.rings[precedent_current_ring][0]:
-                    full_four_quadrant(wavefront, i, 0, True)
-                else:
-                    precedent_on_blank = False
-                    precedent_current_ring -= 1
-                    full_four_quadrant(wavefront, i, 0, False)
-            else:
-                if r >= self.rings[precedent_current_ring][1]:
-                    full_four_quadrant(wavefront, i, 0, False)
-                else:
-                    precedent_on_blank = True
-                    full_four_quadrant(wavefront, i, 0, True)
-            on_blank = precedent_on_blank
-            current_ring = precedent_current_ring
 
-            for j in arange(1, size / 2 + 1):
+            for j in arange(0, size / 2 + 1):
 
                 y = j * pixel_width - y_center
                 r = sqrt(pow(x, 2) + pow(y, 2))
 
-                if on_blank:
-                    if r >= self.rings[current_ring][0]:
-                        full_four_quadrant(wavefront, i, j, True)
-                    else:
-                        on_blank = False
-                        current_ring -= 1
-                        full_four_quadrant(wavefront, i, j, False)
+                if j == 0:
+                    on_blank = precedent_on_blank
+                    current_ring = precedent_current_ring
+
+                # Central black zone
+                if current_ring == -1:
+                    on_blank = False
+
                 else:
-                    if r >= self.rings[current_ring][1]:
-                        full_four_quadrant(wavefront, i, j, False)
+
+                    # Changing zone
+                    if on_blank and r < self.rings[current_ring][0]:
+                        on_blank, current_ring = \
+                            self.__next_ring(current_ring, r)
+
                     else:
-                        on_blank = True
-                        full_four_quadrant(wavefront, i, j, True)
+                        # Changing zone
+                        if r < self.rings[current_ring][0]:
+                            on_blank, current_ring = \
+                                self.__next_ring(current_ring, r)
+                        # Change color but same zone
+                        elif r < self.rings[current_ring][1]:
+                            on_blank = True
+
+                full_four_quadrant(fresnel_array, i, j, on_blank)
+
+                if j == 0:
+                    precedent_on_blank = on_blank
+                    precedent_current_ring = current_ring
+        return fresnel_array
 
     def __construction(self):
 
@@ -150,14 +113,23 @@ class FresnelArray:
             else:
                 del self.rings[0]
 
-    def __found_ring(self, start, r):
-        is_found = False
-        while not is_found and start >= 0:
-            if r >= self.rings[start][0]:
-                is_found = True
-            else:
-                start -= 1
-        return start
+    def __next_ring(self, current_ring, r):
+        current_ring -= 1
+        while r < self.rings[current_ring][0] and current_ring >= 0:
+            current_ring -= 1
+        if r >= self.rings[current_ring][1]:
+            on_blank = False
+        else:
+            on_blank = True
+        return on_blank, current_ring
+
+    def get_params_list(self):
+        params = [('WIDTH', self.width, 'Width of the grid'),
+                  ('NZONES', self.n_zones, 'Number of Fresnel areas'),
+                  ('OBSTR', self.obstruction, 'Central obstruction'),
+                  ('OFFSET', self.offset, 'Central offset '),
+                  ('LAMBDA', self.wavelength, 'Wavelength')]
+        return params
 
 
 def full_four_quadrant(wavefront, i, j, value):
