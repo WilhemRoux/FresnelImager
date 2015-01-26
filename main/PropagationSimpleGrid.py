@@ -5,11 +5,12 @@
 from sys import argv, exit
 from src import ConfigurationParametersTools
 from os.path import exists, isfile
-from numpy import pi, cos, sin
 import src.FitsTools as Fits
+import src.PropagationTools as PropagationTools
 
 
 def run(conf_file):
+
     # Gets the parameters for the simulation
     print('Reading the configuration file : %s' % conf_file)
     parameters = ConfigurationParametersTools.ConfigurationParameters()
@@ -21,17 +22,10 @@ def run(conf_file):
 
     # Transform in wavefront
     wavefront = fresnel_array.astype('complex')
-
     # Adding a complex phase due to the offset of the source
-    if parameters.source_optical_axis_angle > 0:
-        deviation = parameters.source_optical_axis_angle / 180. * pi
-        azimuth = parameters.source_direction_angle / 180. * pi
-        # Compute the unit vector pointing to the source
-        source_x = cos(azimuth) * sin(deviation)
-        source_y = sin(azimuth) * sin(deviation)
-        # Compute the phase to add to each pixel
-        for line in wavefront:
-            print line
+    PropagationTools.add_inclination(parameters, wavefront)
+
+    Fits.save_wavefront(parameters, wavefront)
 
 
 if __name__ == '__main__':

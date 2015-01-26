@@ -27,6 +27,16 @@ def save_module_image(fits_file_path, image, dtype='float64'):
 
     pyfits.writeto(fits_file_path, image.astype(dtype), clobber=True)
 
+def save_wavefront(parameters, wavefront):
+    file_name = 'Wavefront_' + strftime('%Y%m%d_%H%M%S') + '.fits'
+    file_path = join(parameters.output_directory_path, file_name)
+    print('Save wavefront in : %s' % file_path)
+    hdu = pyfits.PrimaryHDU()
+    hdu.data = numpy.array([wavefront.real.transpose(),
+                            wavefront.imag.transpose()])
+    # Save the .fits
+    hdu.writeto(file_path)
+
 
 def read_fresnel_array(file_path):
     hdu = pyfits.open(file_path)
@@ -59,7 +69,7 @@ def read_or_create_fresnel_array(parameters):
     # The Fresnel array doesn't exist
     file_name = 'FresnelArray_' + strftime('%Y%m%d_%H%M%S') + '.fits'
     file_path = join(parameters.output_directory_path, file_name)
-    print('Creating the Fresnel array in : %s' %file_path)
+    print('Creating the Fresnel array in : %s' % file_path)
     return create_fresnel_array(file_path, parameters)
 
 
