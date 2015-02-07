@@ -37,6 +37,14 @@ def save_wavefront(parameters, wavefront):
     # Save the .fits
     hdu.writeto(file_path)
 
+def save_wavefront_module(parameters, wavefront):
+    file_name = 'WavefrontModule_' + strftime('%Y%m%d_%H%M%S') + '.fits'
+    file_path = join(parameters.output_directory_path, file_name)
+    print('Save wavefront in : %s' % file_path)
+    hdu = pyfits.PrimaryHDU()
+    hdu.data = numpy.array((wavefront.real**2+wavefront.imag**2).transpose())
+    # Save the .fits
+    hdu.writeto(file_path)
 
 def read_fresnel_array(file_path):
     hdu = pyfits.open(file_path)

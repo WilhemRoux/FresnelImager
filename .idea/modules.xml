@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/PropagationSimpleGrid.iml" filepath="$PROJECT_DIR$/.idea/PropagationSimpleGrid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/propag.iml" filepath="$PROJECT_DIR$/.idea/propag.iml" />
     </modules>
   </component>
 </project>

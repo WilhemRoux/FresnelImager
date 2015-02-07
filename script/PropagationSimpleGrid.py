@@ -3,10 +3,11 @@
 # Copyright 2014 Wilhem Roux
 
 from sys import argv, exit
-from src import ConfigurationParametersTools
+from lib import ConfigurationParametersTools
 from os.path import exists, isfile
-import src.FitsTools as Fits
-import src.PropagationTools as PropagationTools
+from time import strftime
+import lib.FitsTools as Fits
+from lib.SquarePlane import SquarePlane
 
 
 def run(conf_file):
@@ -19,14 +20,15 @@ def run(conf_file):
     # Reads or creates the Fresnel Array
     print('Check if the Fresnel array already exists...')
     fresnel_array = Fits.read_or_create_fresnel_array(parameters)
+    print ('The raw transmission is : %f'
+           % (float(fresnel_array.sum())/fresnel_array.size))
 
     # Transform in wavefront
-    wavefront = fresnel_array.astype('complex')
+    wavefront = SquarePlane(parameters.wavelength,
+                            parameters.fresnel_array.width, fresnel_array)
     # Adding a complex phase due to the offset of the source
-    PropagationTools.add_inclination(parameters, wavefront)
-
-    Fits.save_wavefront(parameters, wavefront)
-
+    wavefront.fresnel_propagation(parameters.fresnel_array.focal_length)
+    wavefront.save_module(parameters.output_directory_path)
 
 if __name__ == '__main__':
     if len(argv) == 2:

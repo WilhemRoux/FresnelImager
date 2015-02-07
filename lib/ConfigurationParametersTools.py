@@ -13,7 +13,6 @@ class ConfigurationParameters:
 
     def __init__(self):
         self.output_directory_path = ""
-        self.n_threads = 0
         self.wavefront_sampling = 10000
         self.source_optical_axis_angle = 0.
         self.source_direction_angle = 0.
@@ -42,23 +41,16 @@ class ConfigurationParameters:
             print ("Default value : output_directory_path = %s"
                    % self.output_directory_path)
 
-        if 'n_threads' in read_parameters:
-            if int(read_parameters['n_threads']) >= 0:
-                self.n_threads = int(read_parameters['n_threads'])
-            else:
-                print("Error : n_threads is negative.")
-                exit(1)
-        else:
-            print ("Warning : No n_threads in %s ." % configuration_file_path)
-            print ("Default value : n_threads = %s" % self.n_threads)
-
         if 'wavefront_sampling' in read_parameters:
             if int(read_parameters['wavefront_sampling']) > 0:
-                self.wavefront_sampling = int(
-                    read_parameters['wavefront_sampling'])
+                if int(read_parameters['wavefront_sampling']) % 2 == 0:
+                    self.wavefront_sampling = int(
+                        read_parameters['wavefront_sampling'])
+                else:
+                    raise ValueError('wavefront_sampling must be an even '
+                                     'number.')
             else:
-                print("Error : wavefront_sampling is negative or zero.")
-                exit(1)
+                raise ValueError('wavefront_sampling must be positive.')
         else:
             print ("Warning : No wavefront_sampling in %s ." %
                    configuration_file_path)
@@ -88,8 +80,7 @@ class ConfigurationParameters:
                 self.wavelength = float(read_parameters['wavelength'])
                 self.fresnel_array.wavelength = self.wavelength
             else:
-                print("Error : wavelength is negative or zero.")
-                exit(1)
+                raise ValueError('wavelength must be positive.')
         else:
             print ("Warning : No wavelength in %s ." % configuration_file_path)
             print ("Default value : wavelength = %s" % self.wavelength)
@@ -98,8 +89,7 @@ class ConfigurationParameters:
             if float(read_parameters['width']) > 0:
                 self.fresnel_array.width = float(read_parameters['width'])
             else:
-                print("Error : width is negative or zero.")
-                exit(1)
+                raise ValueError('width must be positive.')
         else:
             print ("Warning : No width in %s ." % configuration_file_path)
             print ("Default value : width = %s" % self.fresnel_array.width)
@@ -108,8 +98,7 @@ class ConfigurationParameters:
             if int(read_parameters['n_zones']) > 0:
                 self.fresnel_array.n_zones = int(read_parameters['n_zones'])
             else:
-                print("Error : n_zones is negative or zero.")
-                exit(1)
+                raise ValueError('n_zones must be positive')
         else:
             print ("Warning : No n_zones in %s ." % configuration_file_path)
             print ("Default value : n_zones = %s" %
@@ -120,8 +109,7 @@ class ConfigurationParameters:
                 self.fresnel_array.obstruction = float(
                     read_parameters['obstruction'])
             else:
-                print("Error : obstruction is negative.")
-                exit(1)
+                raise ValueError('obstruction must be zero or positive')
         else:
             print ("Warning : No obstruction in %s ." % configuration_file_path)
             print ("Default value : obstruction = %s" %
@@ -132,8 +120,7 @@ class ConfigurationParameters:
                 self.fresnel_array.offset = float(
                     read_parameters['central_offset'])
             else:
-                print("Error : central_offset is negative.")
-                exit(1)
+                raise ValueError('central_offset must be zero or positive')
         else:
             print ("Warning : No central_offset in %s ." %
                    configuration_file_path)
@@ -144,8 +131,7 @@ class ConfigurationParameters:
             if float(read_parameters['distance01']) > 0:
                 self.wavelength = float(read_parameters['distance01'])
             else:
-                print("Error : distance01 is negative or zero.")
-                exit(1)
+                raise ValueError('distance01 must be positive')
         else:
             print ("Warning : No distance01 in %s ." % configuration_file_path)
             print ("Default value : distance01 = %s" % self.distance01)

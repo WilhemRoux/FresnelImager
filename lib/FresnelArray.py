@@ -16,6 +16,8 @@ class FresnelArray:
         self.offset = 0.75
         self.rings = []
         self.wavelength = 260.e-9
+        self.focal_length = pow(self.width / 2, 2)\
+                            / (2 * self.n_zones + self.offset - 0.75)
 
     def create_binary_transmission(self, size):
 
@@ -91,14 +93,16 @@ class FresnelArray:
 
         k = 0
         beta_0 = 0.25
-        f_lambda = pow(self.width / 2, 2) / (2 * self.n_zones + self.offset -
-                                             0.75)
+        self.focal_length = pow(self.width / 2, 2) / (2 * self.n_zones +
+                                                      self.offset - 0.75)
 
         while k <= self.n_zones * 2:
             k_adj = k + self.offset - beta_0
-            r_int = sqrt(2 * f_lambda * k_adj + pow(k_adj * self.wavelength, 2))
+            r_int = sqrt(
+                2 * self.focal_length * k_adj + pow(k_adj * self.wavelength, 2))
             k_adj = k + self.offset + beta_0
-            r_ext = sqrt(2 * f_lambda * k_adj + pow(k_adj * self.wavelength, 2))
+            r_ext = sqrt(
+                2 * self.focal_length * k_adj + pow(k_adj * self.wavelength, 2))
             self.rings.append([r_int, r_ext])
             k += 1
 
