@@ -15,7 +15,7 @@ output_directory_path = /Users/wilhemroux/Desktop/NewResults/
 
 # Size of sampling for the fresnel Array
 # Default value : 10000
-wavefront_sampling = 1000
+wavefront_sampling = 10000
 
 
 ##

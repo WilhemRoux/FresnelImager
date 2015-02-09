@@ -5,14 +5,13 @@
 import ConfigParser
 from os.path import isdir
 from os import makedirs
-from sys import exit
 import FresnelArray
 
 
 class ConfigurationParameters:
 
     def __init__(self):
-        self.output_directory_path = ""
+        self.output_directory_path = ''
         self.wavefront_sampling = 10000
         self.source_optical_axis_angle = 0.
         self.source_direction_angle = 0.
@@ -36,9 +35,9 @@ class ConfigurationParameters:
             if not isdir(self.output_directory_path):
                 makedirs(self.output_directory_path)
         else:
-            print ("Warning : No output_directory_path in %s ."
+            print ('Warning : No output_directory_path in %s .'
                    % configuration_file_path)
-            print ("Default value : output_directory_path = %s"
+            print ('Default value : output_directory_path = %s'
                    % self.output_directory_path)
 
         if 'wavefront_sampling' in read_parameters:
@@ -52,27 +51,27 @@ class ConfigurationParameters:
             else:
                 raise ValueError('wavefront_sampling must be positive.')
         else:
-            print ("Warning : No wavefront_sampling in %s ." %
+            print ('Warning : No wavefront_sampling in %s .' %
                    configuration_file_path)
-            print ("Default value : wavefront_sampling = %s" %
+            print ('Default value : wavefront_sampling = %s' %
                    self.wavefront_sampling)
 
         if 'source_optical_axis_angle' in read_parameters:
             self.source_optical_axis_angle = float(
                 read_parameters['source_optical_axis_angle'])
         else:
-            print ("Warning : No source_optical_axis_angle in %s ." %
+            print ('Warning : No source_optical_axis_angle in %s .' %
                    configuration_file_path)
-            print ("Default value : source_optical_axis_angle = %s" %
+            print ('Default value : source_optical_axis_angle = %s' %
                    self.source_optical_axis_angle)
 
         if 'source_direction_angle' in read_parameters:
             self.source_direction_angle = float(
                 read_parameters['source_direction_angle'])
         else:
-            print ("Warning : No source_direction_angle in %s ." %
+            print ('Warning : No source_direction_angle in %s .' %
                    configuration_file_path)
-            print ("Default value : source_direction_angle = %s" %
+            print ('Default value : source_direction_angle = %s' %
                    self.source_direction_angle)
 
         if 'wavelength' in read_parameters:
@@ -82,8 +81,8 @@ class ConfigurationParameters:
             else:
                 raise ValueError('wavelength must be positive.')
         else:
-            print ("Warning : No wavelength in %s ." % configuration_file_path)
-            print ("Default value : wavelength = %s" % self.wavelength)
+            print ('Warning : No wavelength in %s .' % configuration_file_path)
+            print ('Default value : wavelength = %s' % self.wavelength)
 
         if 'width' in read_parameters:
             if float(read_parameters['width']) > 0:
@@ -91,8 +90,8 @@ class ConfigurationParameters:
             else:
                 raise ValueError('width must be positive.')
         else:
-            print ("Warning : No width in %s ." % configuration_file_path)
-            print ("Default value : width = %s" % self.fresnel_array.width)
+            print ('Warning : No width in %s .' % configuration_file_path)
+            print ('Default value : width = %s' % self.fresnel_array.width)
 
         if 'n_zones' in read_parameters:
             if int(read_parameters['n_zones']) > 0:
@@ -100,8 +99,8 @@ class ConfigurationParameters:
             else:
                 raise ValueError('n_zones must be positive')
         else:
-            print ("Warning : No n_zones in %s ." % configuration_file_path)
-            print ("Default value : n_zones = %s" %
+            print ('Warning : No n_zones in %s .' % configuration_file_path)
+            print ('Default value : n_zones = %s' %
                    self.fresnel_array.n_zones)
 
         if 'obstruction' in read_parameters:
@@ -111,8 +110,8 @@ class ConfigurationParameters:
             else:
                 raise ValueError('obstruction must be zero or positive')
         else:
-            print ("Warning : No obstruction in %s ." % configuration_file_path)
-            print ("Default value : obstruction = %s" %
+            print ('Warning : No obstruction in %s .' % configuration_file_path)
+            print ('Default value : obstruction = %s' %
                    self.fresnel_array.obstruction)
 
         if 'central_offset' in read_parameters:
@@ -122,9 +121,9 @@ class ConfigurationParameters:
             else:
                 raise ValueError('central_offset must be zero or positive')
         else:
-            print ("Warning : No central_offset in %s ." %
+            print ('Warning : No central_offset in %s .' %
                    configuration_file_path)
-            print ("Default value : central_offset = %s" %
+            print ('Default value : central_offset = %s' %
                    self.fresnel_array.offset)
 
         if 'distance01' in read_parameters:
@@ -133,5 +132,5 @@ class ConfigurationParameters:
             else:
                 raise ValueError('distance01 must be positive')
         else:
-            print ("Warning : No distance01 in %s ." % configuration_file_path)
-            print ("Default value : distance01 = %s" % self.distance01)
+            print ('Warning : No distance01 in %s .' % configuration_file_path)
+            print ('Default value : distance01 = %s' % self.distance01)

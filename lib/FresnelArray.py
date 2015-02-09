@@ -8,6 +8,7 @@ from math import sqrt, pow
 
 
 class FresnelArray:
+
     def __init__(self):
 
         self.width = 0.065

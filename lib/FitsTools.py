@@ -8,13 +8,6 @@ import glob
 from time import strftime
 from os.path import join
 
-# BITPIX    Numpy Data Type
-# 8         numpy.uint8 (note it is unsigned integer)
-# 16        numpy.int16
-# 32        numpy.int32
-# -32       numpy.float32
-# -64       numpy.float64
-
 
 def save_complex_image(fits_file_path, image, dtype='float64'):
     image = numpy.array([image.real, image.imag])
