@@ -11,11 +11,11 @@
 
 # Directory where output files will be written.
 # Default value : Local directory
-output_directory_path = /Users/wilhemroux/Desktop/NewResults/
+output_directory = /Users/wilhemroux/Desktop/NewResults/
 
 # Size of sampling for the fresnel Array
 # Default value : 10000
-wavefront_sampling = 10000
+wavefront_sampling = 5000
 
 
 ##
@@ -24,7 +24,7 @@ wavefront_sampling = 10000
 
 # Angle between the source and the optical axis, in degrees (between 0 and 90°).
 # Default value : 0.
-source_optical_axis_angle = 10.
+source_optical_axis_angle = 0.
 
 # Angle between the horizontal half axis and the source on the final image
 # plane, counterclockwise, in degrees (between 0° and 360°).

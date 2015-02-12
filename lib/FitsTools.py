@@ -20,9 +20,10 @@ def save_module_image(fits_file_path, image, dtype='float64'):
 
     pyfits.writeto(fits_file_path, image.astype(dtype), clobber=True)
 
+
 def save_wavefront(parameters, wavefront):
     file_name = 'Wavefront_' + strftime('%Y%m%d_%H%M%S') + '.fits'
-    file_path = join(parameters.output_directory_path, file_name)
+    file_path = join(parameters.output_directory, file_name)
     print('Save wavefront in : %s' % file_path)
     hdu = pyfits.PrimaryHDU()
     hdu.data = numpy.array([wavefront.real.transpose(),
@@ -30,14 +31,17 @@ def save_wavefront(parameters, wavefront):
     # Save the .fits
     hdu.writeto(file_path)
 
+
 def save_wavefront_module(parameters, wavefront):
     file_name = 'WavefrontModule_' + strftime('%Y%m%d_%H%M%S') + '.fits'
-    file_path = join(parameters.output_directory_path, file_name)
+    file_path = join(parameters.output_directory, file_name)
     print('Save wavefront in : %s' % file_path)
     hdu = pyfits.PrimaryHDU()
-    hdu.data = numpy.array((wavefront.real**2+wavefront.imag**2).transpose())
+    hdu.data = numpy.array(
+        (wavefront.real ** 2 + wavefront.imag ** 2).transpose())
     # Save the .fits
     hdu.writeto(file_path)
+
 
 def read_fresnel_array(file_path):
     hdu = pyfits.open(file_path)
@@ -45,11 +49,14 @@ def read_fresnel_array(file_path):
 
 
 def create_fresnel_array(file_path, parameters):
+    print('Creating the new Fresnel array in %s' % file_path)
     image = parameters.fresnel_array.create_binary_transmission(
         parameters.wavefront_sampling)
     hdu = pyfits.PrimaryHDU(image.astype('uint8'))
     # Creation of header containing the characteristics of the Fresnel Array
     fresnel_array_params = parameters.fresnel_array.get_params_list()
+    hdu.header.append(('TYPE', 'MASK', 'Mask or wavefront'),
+                      end=True)
     for param in fresnel_array_params:
         hdu.header.append((param[0], param[1], param[2]), end=True)
     # Scaling image
@@ -60,17 +67,18 @@ def create_fresnel_array(file_path, parameters):
 
 
 def read_or_create_fresnel_array(parameters):
+    print('Check if the Fresnel array already exists...')
     # Search fits file in the output directory
-    fits_files = glob.glob(join(parameters.output_directory_path, '*.fits'))
-    for fits_file in fits_files:
+    fits_files = glob.glob(join(parameters.output_directory, '*.fits'))
+    #for fits_file in fits_files:
         # The Fresnel array already exists
-        if has_same_parameters(parameters, fits_file):
-            print('Reading the Fresnel array : %s' % fits_file)
-            return read_fresnel_array(fits_file)
-    # The Fresnel array doesn't exist
+        #if has_same_parameters(parameters, fits_file):
+            #print('Reading the Fresnel array : %s' % fits_file)
+            #return read_fresnel_array(fits_file)
+        # The Fresnel array doesn't exist
+        #else:
     file_name = 'FresnelArray_' + strftime('%Y%m%d_%H%M%S') + '.fits'
-    file_path = join(parameters.output_directory_path, file_name)
-    print('Creating the Fresnel array in : %s' % file_path)
+    file_path = join(parameters.output_directory, file_name)
     return create_fresnel_array(file_path, parameters)
 
 

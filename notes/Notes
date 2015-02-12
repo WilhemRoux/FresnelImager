@@ -1,0 +1,9 @@
+Jeudi 12 février
+
+- Comparaison de la méthode de création de la grille de fresnel (parcours
+classique VS vectorisation) : Pour un tableau de 5000x5000 :
+    2:07 pour la classique
+    0:40 pour la vectorisée
+- Adoption de la méthode vectorisée, même si elle peut être encore améliorée
+je pense... pour la fonction def create_binary_transmission(self, size):
+- Commit V0.01
