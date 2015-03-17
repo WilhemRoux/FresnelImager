@@ -8,7 +8,7 @@ from time import strftime
 
 
 from lib import ConfigurationParameters
-from lib.Wave import WaveFront
+from lib.WaveFront import WaveFront
 import lib.PreliminaryTests
 
 
