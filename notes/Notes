@@ -7,3 +7,59 @@ classique VS vectorisation) : Pour un tableau de 5000x5000 :
 - Adoption de la méthode vectorisée, même si elle peut être encore améliorée
 je pense... pour la fonction def create_binary_transmission(self, size):
 - Commit V0.01
+- Intégration de la taille du tableau dans l'objet FresnelArray
+
+Vendredi 13 février
+
+- Pour la propagation de Fresnel, on divise la fft par la racine du nombre
+d'échantillon pour une égalité de Parceval respectée, du fait de la
+discrétisation du signal
+- Ajout de la quatrième étape de la propagation de Fresnel pour avoir une
+phase correct pour les propagations à suivre
+
+Mardi 17 février
+
+- Création d'une fonction qui compare les paramètres de grille avec les
+paramètres de FITS, indispensable pour éviter de recréer une grille si elle
+existe déjà
+- Ajout du paramètre beta_0 dans la définition de grille de fresnel et dans
+le fichier de conf, qui définira la largeur des anneaux, beta_0 etant le
+pourcentage de longueur d'onde autour du rayon supérieur et inférieur d'un
+anneau de fresnel
+- Mise à jour de l'obstruction centrale circulaire : OK
+- Remise en place du système de lecture de FresnelArray si déjà créé
+- Obstruction centrale carrée au final, pour avoir des agigrettes de
+diffraction et non des anneaux
+- Début des barreaux, nouveaux paramètres dans le fichier de conf:
+    - regular / periodic
+    - distance
+    - thickness
+
+Lundi 23 Février
+
+- Tests sur la génération des anneaux avec le parcours des anneaux : marche
+pas !
+- On va devoir créer un programme C pour générer la grille de Fresnel afin
+d'optimiser le code.
+- Recherche si possibilité d'automatisation de la compilation du script C à
+chaque execution du Python
+
+Mardi 24 Février
+
+- Compilation automatique : OK
+- Trouver comment ecraser le .so s'il existe déjà pour forcer la REcompilation
+- OK
+
+Mercredi 25 Février
+
+-Comment rentrer un tableau et le ressortir du code C
+
+Jeudi 5 Mars
+
+- Génération de la grille de Fresnel (anneau et obstruction) ok !
+- Recherche pour les barreaux
+
+Mardi 17 Mars
+
+- Tests préliminaires pour la fiabilité de la simulaion à coder
+- Premier test sur le sampling de la grille

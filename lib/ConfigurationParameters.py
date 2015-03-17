@@ -5,6 +5,7 @@
 import ConfigParser
 from os.path import isdir
 from os import makedirs, getcwd
+
 import FresnelArray
 
 
@@ -116,8 +117,18 @@ class ConfigurationParameters:
                                  '(%f given)' % offset)
         print('central_offset = %s' % offset)
 
+        beta_0 = 0.25
+        if 'beta_0' in read_parameters:
+            beta_0 = float(read_parameters['beta_0'])
+            if beta_0 < 0 or beta_0 > 1:
+                raise ValueError('beta_0 must be comprise between 0 and 1 (%f '
+                                 'given)' % beta_0)
+        print('beta_0 = %s' % beta_0)
+
         self.fresnel_array = FresnelArray.FresnelArray(width,
                                                        n_zones,
                                                        obstruction,
                                                        offset,
-                                                       self.wavelength)
+                                                       self.wavelength,
+                                                       self.wavefront_sampling,
+                                                       beta_0)

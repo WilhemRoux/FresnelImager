@@ -13,9 +13,9 @@
 # Default value : Local directory
 output_directory = /Users/wilhemroux/Desktop/NewResults/
 
-# Size of sampling for the fresnel Array
+# Size of sampling for the Fresnel Array
 # Default value : 10000
-wavefront_sampling = 5000
+wavefront_sampling = 1000
 
 
 ##
@@ -48,13 +48,20 @@ width = 0.065
 # Default value : 160
 n_zones = 160
 
-# Central obstruction, in meters.
+# Central square obstruction, side in meters.
 # Default value : 0.
-obstruction = 0.
+obstruction = 0.02
 
 # Initial offset at the center, in fraction of OPD.
+# If value = 3/4 => Opaque center
+# If value = 1/4 => Void center
+# Must be comprise between 0 and 1 include
 # Default value : 0.75
-central_offset = 0.5
+central_offset = 0.75
+
+# Parameter defining the width of the Fresnel rings compare to the wavelength
+# Default value : 0.25
+beta_0 = 0.25
 
 
 ##
@@ -79,6 +86,11 @@ apod.function = 1
 ##
 ##  Retaining bars
 ##
+
+# Maintaining bars system
+# Periodic or regular
+
+
 
 # Bar center position compared to the Fresnel area, in fraction of OPD.
 # Default value : -1.
